@@ -1,0 +1,3 @@
+aws cloudformation create-stack --stack-name ec2create --template-body file://ec2_create_userdata.yaml --parameters file://parameters.json
+aws cloudformation list-stacks
+aws cloudformation delete-stack --stack-name ec2create
