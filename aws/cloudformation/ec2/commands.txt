@@ -1,3 +1,8 @@
 aws cloudformation create-stack --stack-name ec2create --template-body file://ec2_create_userdata.yaml --parameters file://parameters.json
 aws cloudformation list-stacks
 aws cloudformation delete-stack --stack-name ec2create
+
+#ssh -key
+ssh-keygen -t rsa -C 'mykey' -f ~/.ssh/mykey
+aws ec2 import-key-pair --key-name "my-key" --public-key-material file://~/.ssh/my-key.pub
+aws ec2 delete-key-pair --key-name "my-key"
