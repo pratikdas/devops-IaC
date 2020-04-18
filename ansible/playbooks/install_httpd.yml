@@ -1,0 +1,20 @@
+---
+- name: Play 1
+  hosts: ec2instances
+  become: yes
+  tasks:
+    - name: Print date
+      command: date
+
+    - name: Execute script
+      script: test_script.sh
+
+    - name: Install httpd
+      yum: 
+         name: httpd
+         state: present
+
+    - name: Start httpd
+      service:
+          name: httpd
+          state: started

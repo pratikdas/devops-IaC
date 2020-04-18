@@ -1,0 +1,11 @@
+ssh-keygen -t rsa -C myec2key -f myec2key
+mv myec2key* ~/.ssh
+aws ec2 import-key-pair --key-name "my-key" --public-key-material file://~/.ssh/myec2key.pub
+aws ec2 import-key-pair --key-name "my-key" --public-key-material file://~/.ssh/myec2key.pub --profile pratikd2001-admin
+vim cloudformation/ec2/parameters.json 
+aws cloudformation create-stack --stack-name ec2create --template-body file://ec2_create_userdata.yaml --parameters file://parameters.json --profile pratikd2001-admin
+sudo vim /etc/ansible/hosts 
+ansible -m ping -i /etc/ansible/hosts 
+ansible ec2instances -m ping -i /etc/ansible/hosts 
+ansible all -m ping -i /etc/ansible/hosts 
+ansible-galaxy init motd
