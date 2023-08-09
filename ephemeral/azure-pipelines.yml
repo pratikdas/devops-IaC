@@ -1,0 +1,50 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+parameters:
+- name: ecosystemId
+  type: string
+  default: "01"
+- name: ecosystemName
+  type: string
+  default: "staging"
+- name: appGroups
+  type: object
+  default:
+  - name: mb
+    projectName: "mbApps"
+    apps:
+    - name: "mobileBanking"
+      repo: 'git://mobile banking/retail'
+      deployment_template: 'build_deploy_swift_app'
+    - name: "mobileBanking"
+      repo: 'git://mobile banking/bff/retail'
+      deployment_template: 'build_deploy_java_app'
+  - name: ib
+    projectName: "ibApps"
+    apps:
+    - name: "internetBanking"
+      repo: 'git://internet banking/retail'
+      deployment_template: 'build_deploy_angular_app'
+    - name: "mobileBanking"
+      repo: 'git://internet banking/bff/retail'
+      deployment_template: 'build_deploy_nodejs_app'   
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Initialize
+  jobs:
+  - job: A1
+  - job: A2
+
+- stage: Build_deploy
+  jobs:
+  - job: B1
+  - job: B2
