@@ -1,0 +1,21 @@
+parameters:
+- name: ecosystemId
+- name: app # name of the parameter; required
+  type: object # data type of the parameter; required
+- name: appGroup
+  type: object
+
+jobs:
+- deployment: qa
+  displayName: 'deploy helm chart on AKS qa'
+  pool:
+    vmImage: ubuntu-latest
+  variables:
+    k8sNamespace: $(projectName)-qa
+    replicas: 1
+  environment: qa-$(projectName)
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - template: ./common/cd-steps.yaml
