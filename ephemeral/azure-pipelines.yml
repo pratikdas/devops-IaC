@@ -1,7 +1,5 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# pipeline for building ephemeral environment
+
 
 trigger:
 - master
@@ -34,6 +32,15 @@ parameters:
     - name: "mobileBanking"
       repo: 'git://internet banking/bff/retail'
       deployment_template: 'build_deploy_nodejs_app'   
+  - name: accounts
+    projectName: "ibApps"
+    apps:
+    - name: "accountsAPI"
+      repo: 'git://accounts/api'
+      deployment_template: 'build_deploy_angular_app'
+    - name: "accounts"
+      repo: 'git://internet banking/bff/retail'
+      deployment_template: 'build_deploy_nodejs_app'        
 
 pool:
   vmImage: ubuntu-latest
@@ -41,10 +48,15 @@ pool:
 stages:
 - stage: Initialize
   jobs:
-  - job: A1
-  - job: A2
+  - job: Validate
+    steps:
+    - bash: echo "validate inputs"
 
 - stage: Build_deploy
   jobs:
-  - job: B1
-  - job: B2
+  - ${{ each appGroup in parameters.appGroups }}:
+    - ${{ each app in parameters.appGroup.apps }}:
+      - template: templates/${{app.deployment_template}}
+        parameters:
+          app: ${{ app }}
+
